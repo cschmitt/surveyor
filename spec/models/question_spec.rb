@@ -117,4 +117,23 @@ describe Question do
     end
   end
 
+  context "with translations" do
+    require 'yaml'
+    let(:survey){ Factory(:survey) }
+    let(:survey_section){ Factory(:survey_section) }
+    let(:survey_translation){ Factory(:survey_translation) }
+    before do
+      question.reference_identifier = "hello"
+      question.survey_section = survey_section
+      survey_section.survey = survey
+      survey.translations << survey_translation
+    end
+    it "returns its own translation" do
+      YAML.load(survey_translation.translation).should_not be_nil
+      question.translation(:es)[:text].should == YAML.load(survey_translation.translation).with_indifferent_access[:questions][:hello][:text]
+    end
+    it "returns its own default values" do
+      question.translation(:de).should == {:text => question.text, :help_text => question.help_text}.with_indifferent_access
+    end
+  end
 end

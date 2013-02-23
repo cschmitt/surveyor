@@ -55,4 +55,22 @@ describe SurveySection do
       question_ids.each{|id| Question.find_by_id(id).should be_nil}
     end
   end
+
+  context "with translations" do
+    require 'yaml'
+    let(:survey){ Factory(:survey) }
+    let(:survey_translation){ Factory(:survey_translation) }
+    before do
+      survey_section.reference_identifier = "one"
+      survey_section.survey = survey
+      survey.translations << survey_translation
+    end
+    it "returns its own translation" do
+      YAML.load(survey_translation.translation).should_not be_nil
+      survey_section.translation(:es)[:title].should == YAML.load(survey_translation.translation).with_indifferent_access[:survey_sections][:one][:title]
+    end
+    it "returns its own default values" do
+      survey_section.translation(:de).should == {:title => survey_section.title, :description => survey_section.description}.with_indifferent_access
+    end
+  end  
 end

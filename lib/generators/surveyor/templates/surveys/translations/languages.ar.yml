@@ -1,0 +1,13 @@
+# encoding: UTF-8
+title: "لغة واحدة لا تكفي"
+survey_sections:
+  one:
+    title: "واحد"
+questions:
+  hello:
+    text: "السلام عليكم"
+  name:
+    text: "ما اسمك؟"
+    answers:
+      name:
+        help_text: "... اسمي"

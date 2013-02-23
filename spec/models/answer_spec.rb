@@ -65,4 +65,29 @@ describe Answer do
       answer.split_or_hidden_text(nil, mustache_context).should == "You are in Northwestern"
     end
   end
+
+  context "with translations" do
+    require 'yaml'
+    let(:survey){ Factory(:survey) }
+    let(:survey_section){ Factory(:survey_section) }
+    let(:survey_translation){ Factory(:survey_translation) }
+    let(:question){ Factory(:question, :reference_identifier => "name") }
+    before do
+      answer.reference_identifier = "name"
+      answer.help_text = "My name is..."
+      answer.text = nil
+      answer.question = question
+      question.survey_section = survey_section
+      survey_section.survey = survey
+      survey.translations << survey_translation
+    end
+    it "returns its own translation" do
+      answer.question.reference_identifier.should == "name"
+      YAML.load(survey_translation.translation).should_not be_nil
+      answer.translation(:es)[:help_text].should == YAML.load(survey_translation.translation).with_indifferent_access[:questions][:name][:answers][:name][:help_text]
+    end
+    it "returns its own default values" do
+      answer.translation(:de).should == {:text => nil, :help_text => "My name is...", :default_value => nil}.with_indifferent_access
+    end
+  end
 end

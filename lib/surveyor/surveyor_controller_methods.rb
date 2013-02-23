@@ -21,7 +21,6 @@ module Surveyor
         codes[s.access_code][:survey_versions] << s.survey_version
         codes
       end
-      @title = "You can take these surveys"
       redirect_to surveyor_index unless surveyor_index == available_surveys_path
     end
 

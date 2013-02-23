@@ -1,0 +1,13 @@
+# encoding: UTF-8
+title: "한 가지 언어는 충분하지 못 해"
+survey_sections:
+  one:
+    title: "하나"
+questions:
+  hello:
+    text: "안녕하십니가"
+  name:
+    text: "성함이 어떻게 되십니까?"
+    answers:
+      name:
+        help_text: "제 이름은 ... 입니다"

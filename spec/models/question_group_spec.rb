@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe QuestionGroup do
@@ -57,6 +58,29 @@ describe QuestionGroup do
         question_group.attributes = {:updated_at => 3.hours.ago} # Rails doesn't return false, but this will be checked in the comparison to saved_attrs
       end
       question_group.attributes.should == saved_attrs
+    end
+  end
+
+  context "with translations" do
+    require 'yaml'
+    let(:survey){ Factory(:survey) }
+    let(:survey_section){ Factory(:survey_section) }
+    let(:survey_translation){ Factory(:survey_translation, :translation => "question_groups:\n  goodbye:\n    text: ¡Adios!") }
+    let(:question){ Factory(:question) }
+    before do
+      question_group.text = "Goodbye"
+      question_group.reference_identifier = "goodbye"
+      question_group.questions << question
+      question.survey_section = survey_section
+      survey_section.survey = survey
+      survey.translations << survey_translation
+    end
+    it "returns its own translation" do
+      YAML.load(survey_translation.translation).should_not be_nil
+      question_group.translation(:es)[:text].should == YAML.load(survey_translation.translation).with_indifferent_access[:question_groups][:goodbye][:text]
+    end
+    it "returns its own default values" do
+      question_group.translation(:de).should == {:text => "Goodbye", :help_text => nil}.with_indifferent_access
     end
   end
 end
