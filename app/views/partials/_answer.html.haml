@@ -20,7 +20,7 @@
       = a_text(a, nil, @render_context)
   %span.help= render_help_text(a, @render_context) unless g && g.display_type == "grid"
 
-- if a.input_mask
+- if input_mask_javascript(a)
   :javascript
     $(document).ready(function() {
       #{input_mask_javascript(a)}
