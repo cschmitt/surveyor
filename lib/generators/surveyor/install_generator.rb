@@ -38,6 +38,7 @@ module Surveyor
       add_unique_index_on_access_code_and_version_in_surveys
       update_blank_versions_on_surveys
       api_ids_must_be_unique
+      add_input_mask_attributes_to_answer
     )
 
     def readme
