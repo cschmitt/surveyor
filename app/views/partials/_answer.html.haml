@@ -15,13 +15,7 @@
   - when "none"
     - if %w(date datetime time float integer string text).include? a.response_class
       = ff.input :answer_id, :as => :quiet, :input_html => {:class => a.css_class, :value => a.id}
-      = ff.input rc_to_attr(a.response_class), :as => rc_to_as(a.response_class), :label => a_text(a, :pre, @render_context).blank? ? false : a_text(a, :pre, @render_context), :hint => a_text(a, :post, @render_context), :input_html => generate_pick_none_input_html(r.as(a.response_class), a.default_value, a.css_class + a.api_id, a.response_class, disabled)
+      = ff.input rc_to_attr(a.response_class), :as => rc_to_as(a.response_class), :label => a_text(a, :pre, @render_context).blank? ? false : a_text(a, :pre, @render_context), :hint => a_text(a, :post, @render_context), :input_html => generate_pick_none_input_html(r.as(a.response_class), a.default_value, a.css_class, a.response_class, disabled, a.input_mask, a.placeholder)
     - else
       = a_text(a, nil, @render_context)
   %span.help= render_help_text(a, @render_context) unless g && g.display_type == "grid"
-
-- if input_mask_javascript(a)
-  :javascript
-    $(document).ready(function() {
-      #{input_mask_javascript(a)}
-    });
